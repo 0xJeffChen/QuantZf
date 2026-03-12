@@ -93,7 +93,8 @@ class DBManager:
         sql = """
         SELECT
             d.trade_date, d.open, d.high, d.low, d.close, d.vol,
-            i.ma5, i.ma10, i.ma20, i.ma60, i.rsi6, i.rsi12, i.rsi24, i.adx
+            i.ma5, i.ma10, i.ma20, i.ma60, i.rsi6, i.rsi12, i.rsi24, i.adx,
+            i.kdj_k, i.kdj_d, i.kdj_j, i.boll_up, i.boll_mid, i.boll_low, i.atr
         FROM 
             hk_stock_daily d
         LEFT JOIN 

@@ -40,7 +40,7 @@ def calculate_indicators(
 
     # 确定要计算的指标
     indicators_to_calculate = (
-        indicator_types if indicator_types else ["ma", "macd", "kdj", "rsi", "bbands", "adx"]
+        indicator_types if indicator_types else ["ma", "macd", "kdj", "rsi", "bbands", "adx", "atr"]
     )
     logging.info(f"Calculating indicators: {indicators_to_calculate}")
 
@@ -67,6 +67,9 @@ def calculate_indicators(
         
     if "adx" in indicators_to_calculate:
         df_calculated.ta.adx(length=14, append=True)
+
+    if "atr" in indicators_to_calculate:
+        df_calculated.ta.atr(length=14, append=True)
 
     logging.info("Indicator calculation finished.")
     return df_calculated
@@ -127,6 +130,7 @@ def process_and_store_indicators(
             "bbm_20_2.0_2.0": "boll_mid",
             "bbu_20_2.0_2.0": "boll_up",
             "adx_14": "adx",
+            "ATRr_14": "atr",
         }
         df_with_indicators.rename(columns=rename_map, inplace=True)
 
@@ -138,7 +142,7 @@ def process_and_store_indicators(
         columns_to_insert = [
             "ts_code", "trade_date", "ma5", "ma10", "ma20", "ma60",
             "macd_dif", "macd_dea", "macd_hist", "kdj_k", "kdj_d", "kdj_j",
-            "rsi6", "rsi12", "rsi24", "boll_up", "boll_mid", "boll_low", "adx"
+            "rsi6", "rsi12", "rsi24", "boll_up", "boll_mid", "boll_low", "adx", "atr"
         ]
         columns_to_insert = [
             col for col in columns_to_insert if col in df_with_indicators.columns
@@ -182,6 +186,7 @@ def batch_process_indicators(stocks: List[str], **kwargs):
 if __name__ == "__main__":
     load_dotenv()
     # --- 示例1: 计算并存储单只股票 (小米集团) 的所有技术指标 ---
+    process_and_store_indicators(ts_code="01810.HK")
     process_and_store_indicators(ts_code="00700.HK")
 
     # --- 示例2: 批量计算并存储多只股票 (腾讯、阿里) 的 MA 和 RSI 指标 ---
